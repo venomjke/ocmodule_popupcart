@@ -68,7 +68,7 @@ class ControllerModulePopupCart extends Controller {
 		
 		$this->data['modules'] = array();
 		
-		$this->init_config_fields(array('popupcart_module','popupcart_image_width','popupcart_image_height','popupcart_title_draggable','popupcart_title_text','popupcart_title_visible','popupcart_xpath_trigger'));
+		$this->init_config_fields(array('popupcart_module','popupcart_image_width','popupcart_image_height','popupcart_title_draggable','popupcart_title_text','popupcart_title_visible'));
 
 		$this->data['modules'] = &$this->data['popupcart_module'];
 
@@ -94,8 +94,7 @@ class ControllerModulePopupCart extends Controller {
 			'popupcart_image_height' => 100,
 			'popupcart_title_visible' => 0,
 			'popupcart_title_text' => 'Всплывающая корзина',
-			'popupcart_title_draggable' => 0,
-			'popupcart_xpath_trigger' => '.cart input[type=button],.cart a.button'
+			'popupcart_title_draggable' => 0		
 		);
 
 		$this->model_setting_setting->editSetting('popupcart',$settings);
@@ -125,11 +124,6 @@ class ControllerModulePopupCart extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$xpath_trigger = $this->request->post['popupcart_xpath_trigger'];
-
-		if(empty($xpath_trigger))
-			$this->error['popupcart_xpath_trigger'] = $this->language->get('error_popupcart_xpath_trigger');
-
 		if(!empty($this->error)){
 
 			$error_msg = 'Во время сохранения возникли проблемы!';
@@ -145,11 +139,6 @@ class ControllerModulePopupCart extends Controller {
 
 	private function check_errors()
 	{
-		if(isset($this->error['popupcart_xpath_trigger'])){
-			$this->data['error_popupcart_xpath_trigger'] = $this->error['popupcart_xpath_trigger'];
-		}else{
-			$this->data['error_popupcart_xpath_trigger'] = '';
-		}
 	}
 
 	private function check_warnings()

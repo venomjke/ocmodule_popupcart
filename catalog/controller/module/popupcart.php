@@ -15,7 +15,6 @@ class ControllerModulePopupCart extends Controller {
 		$this->data['popupcart_title_visible']= $this->config->get('popupcart_title_visible');
 		$this->data['popupcart_title_text']= $this->config->get('popupcart_title_text');
 		$this->data['config']['draggable'] = $this->config->get('popupcart_title_draggable');
-		$this->data['config']['xpath_trigger'] = $this->config->get('popupcart_xpath_trigger');
 
 		if( file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/stylesheet/popupcart.css') ){
 			$this->document->addStyle('catalog/view/theme/' . $this->config->get('config_template') . '/stylesheet/popupcart.css');

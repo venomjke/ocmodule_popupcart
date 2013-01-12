@@ -123,18 +123,6 @@
                 </select>
               </td>
             </tr>
-            <tr>
-              <td> <?php echo $this->language->get('text_popupcart_xpath_trigger'); ?> </td>
-              <td>
-                <input type="text" name="popupcart_xpath_trigger" value="<?php echo $popupcart_xpath_trigger; ?>" size="64" >
-
-                <?php if( ! empty($error_popupcart_xpath_trigger) ): ?>
-                <br/>
-                <span class="error"> <?php echo $error_popupcart_xpath_trigger; ?> </span>
-
-                <?php endif; ?>
-              </td>
-            </tr>
           </table>
         </div>
       </form>
