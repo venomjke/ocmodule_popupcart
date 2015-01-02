@@ -16,18 +16,18 @@
 	/*
 	* Путь до товарной сетки
 	*/
-	productGridPath = '.product-grid, .product-list',
+	var productGridPath = '.product-grid, .product-list',
 
 	/*
 	* Путь до кнопки добавления товара с id товара
 	*/
-	productIdPath   = '.product-grid div div.cart input.button, .product-list div div.cart input.button,.product-info div.cart #button-cart',
+	var productIdPath   = '.product-grid div div.cart input.button, .product-list div div.cart input.button,.product-info div.cart #button-cart',
 
 	/*
 	* регулярка для извлечения id товара из строки addToCart('id'), другого способа извлечения id
 	* не нашел, только если в ручную задавать
 	*/
-	regexProductId  = /\w+\('(\d+)'\);/,
+	var regexProductId  = /\w+\('(\d+)'\);/,
 	
 	/*
 	* Инициализация контейнера
