@@ -1,9 +1,9 @@
 <?php
 // Heading
-$_['heading_title']       = 'Всплывающая корзина';
+$_['heading_title']       = 'PopupCart (Всплывающая корзина)';
 
 // Tabs
-$_['tab_general'] 				= 'Модули';
+$_['tab_general'] 			 = 'Модули';
 $_['tab_settings'] 			  = 'Настройки';
 
 // Text
@@ -15,10 +15,12 @@ $_['text_column_left']    = 'Левая колонка';
 $_['text_column_right']   = 'Правая колонка';
 
 // Settings
-$_['text_popupcart_image_width'] = 'Ширина миниатюры';
-$_['text_popupcart_image_height'] = 'Высота миниатюры';
-$_['text_popupcart_title_visible']= 'Наличие заголовка у окна';
-$_['text_popupcart_title_text']= 'Текст заголовка';
+$_['text_popupcart_image_width']     = 'Ширина миниатюры';
+$_['text_popupcart_image_height']    = 'Высота миниатюры';
+$_['text_popupcart_title_text']      = 'Текст заголовка';
+$_['text_popupcart_show_recommend']  = 'Показывать "С этим товаром покупают"?';
+$_['text_popupcart_field_model']     = 'Показывать поле "Модель"?';
+$_['text_popupcart_field_sku']       = 'Показывать поле "Артикул"?';
 $_['text_popupcart_title_draggable'] = 'Возможность перемещения окна';
 
 // Entry

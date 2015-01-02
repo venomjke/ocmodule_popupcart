@@ -12,22 +12,22 @@
     <div class="heading">
       <h1><img src="view/image/module.png" alt="" /> <?php echo $heading_title; ?></h1>
       <div class="buttons">
-        <a onclick="$('#form').append('<input type=hidden value=save_exit name=action />');$('#form').submit();" class="button"><?php echo $this->language->get('button_save_exit'); ?></a>
-        <a onclick="$('#form').submit();" class="button"><?php echo $this->language->get('button_save'); ?></a>
-        <a onclick="location = '<?php echo $cancel; ?>';" class="button"><?php echo $this->language->get('button_cancel'); ?></a>
+        <a onclick="$('#form').append('<input type=hidden value=save_exit name=action />');$('#form').submit();" class="button"><?php echo $lang->get('button_save_exit'); ?></a>
+        <a onclick="$('#form').submit();" class="button"><?php echo $lang->get('button_save'); ?></a>
+        <a onclick="location = '<?php echo $cancel; ?>';" class="button"><?php echo $lang->get('button_cancel'); ?></a>
       </div>
     </div>
     <div class="content">
       <form action="<?php echo $action; ?>" method="post" id="form">
-       <div id="tabs" class="htabs"><a href="#tab_general"><?php echo $this->language->get('tab_general'); ?></a><a href="#tab_settings"><?php echo $this->language->get('tab_settings'); ?></a></div>
+       <div id="tabs" class="htabs"><a href="#tab_general"><?php echo $lang->get('tab_general'); ?></a><a href="#tab_settings"><?php echo $lang->get('tab_settings'); ?></a></div>
         <div id="tab_general">
           <table id="module" class="list">
               <thead>
                 <tr>
-                  <td class="left"><?php echo $this->language->get('entry_layout'); ?></td>
-                  <td class="left"><?php echo $this->language->get('entry_position'); ?></td>
-                  <td class="left"><?php echo $this->language->get('entry_status'); ?></td>
-                  <td class="right"><?php echo $this->language->get('entry_sort_order'); ?></td>
+                  <td class="left"><?php echo $lang->get('entry_layout'); ?></td>
+                  <td class="left"><?php echo $lang->get('entry_position'); ?></td>
+                  <td class="left"><?php echo $lang->get('entry_status'); ?></td>
+                  <td class="right"><?php echo $lang->get('entry_sort_order'); ?></td>
                   <td></td>
                 </tr>
               </thead>
@@ -47,37 +47,37 @@
                     </select></td>
                   <td class="left"><select name="popupcart_module[<?php echo $module_row; ?>][position]">
                       <?php if ($module['position'] == 'content_top') { ?>
-                      <option value="content_top" selected="selected"><?php echo $this->language->get('text_content_top'); ?></option>
+                      <option value="content_top" selected="selected"><?php echo $lang->get('text_content_top'); ?></option>
                       <?php } else { ?>
-                      <option value="content_top"><?php echo $this->language->get('text_content_top'); ?></option>
+                      <option value="content_top"><?php echo $lang->get('text_content_top'); ?></option>
                       <?php } ?>
                       <?php if ($module['position'] == 'content_bottom') { ?>
-                      <option value="content_bottom" selected="selected"><?php echo $this->language->get('text_content_bottom'); ?></option>
+                      <option value="content_bottom" selected="selected"><?php echo $lang->get('text_content_bottom'); ?></option>
                       <?php } else { ?>
-                      <option value="content_bottom"><?php echo $this->language->get('text_content_bottom'); ?></option>
+                      <option value="content_bottom"><?php echo $lang->get('text_content_bottom'); ?></option>
                       <?php } ?>
                       <?php if ($module['position'] == 'column_left') { ?>
-                      <option value="column_left" selected="selected"><?php echo $this->language->get('text_column_left'); ?></option>
+                      <option value="column_left" selected="selected"><?php echo $lang->get('text_column_left'); ?></option>
                       <?php } else { ?>
-                      <option value="column_left"><?php echo $this->language->get('text_column_left'); ?></option>
+                      <option value="column_left"><?php echo $lang->get('text_column_left'); ?></option>
                       <?php } ?>
                       <?php if ($module['position'] == 'column_right') { ?>
-                      <option value="column_right" selected="selected"><?php echo $this->language->get('text_column_right'); ?></option>
+                      <option value="column_right" selected="selected"><?php echo $lang->get('text_column_right'); ?></option>
                       <?php } else { ?>
-                      <option value="column_right"><?php echo $this->language->get('text_column_right'); ?></option>
+                      <option value="column_right"><?php echo $lang->get('text_column_right'); ?></option>
                       <?php } ?>
                     </select></td>
                   <td class="left"><select name="popupcart_module[<?php echo $module_row; ?>][status]">
                       <?php if ($module['status']) { ?>
-                      <option value="1" selected="selected"><?php echo $this->language->get('text_enabled'); ?></option>
-                      <option value="0"><?php echo $this->language->get('text_disabled'); ?></option>
+                      <option value="1" selected="selected"><?php echo $lang->get('text_enabled'); ?></option>
+                      <option value="0"><?php echo $lang->get('text_disabled'); ?></option>
                       <?php } else { ?>
-                      <option value="1"><?php echo $this->language->get('text_enabled'); ?></option>
-                      <option value="0" selected="selected"><?php echo $this->language->get('text_disabled'); ?></option>
+                      <option value="1"><?php echo $lang->get('text_enabled'); ?></option>
+                      <option value="0" selected="selected"><?php echo $lang->get('text_disabled'); ?></option>
                       <?php } ?>
                     </select></td>
                   <td class="right"><input type="text" name="popupcart_module[<?php echo $module_row; ?>][sort_order]" value="<?php echo $module['sort_order']; ?>" size="3" /></td>
-                  <td class="left"><a onclick="$('#module-row<?php echo $module_row; ?>').remove();" class="button"><?php echo $this->language->get('button_remove'); ?></a></td>
+                  <td class="left"><a onclick="$('#module-row<?php echo $module_row; ?>').remove();" class="button"><?php echo $lang->get('button_remove'); ?></a></td>
                 </tr>
               </tbody>
               <?php $module_row++; ?>
@@ -86,7 +86,7 @@
               <tfoot>
                 <tr>
                   <td colspan="4"></td>
-                  <td class="left"><a onclick="addModule();" class="button"><?php echo $this->language->get('button_add_module'); ?></a></td>
+                  <td class="left"><a onclick="addModule();" class="button"><?php echo $lang->get('button_add_module'); ?></a></td>
                 </tr>
               </tfoot>
             </table>
@@ -94,33 +94,51 @@
         <div id="tab_settings">
           <table class="form">
             <tr>
-              <td> <?php echo $this->language->get('text_popupcart_image_width'); ?> </td>
+              <td> <?php echo $lang->get('text_popupcart_image_width'); ?> </td>
               <td> <input type="text" name="popupcart_image_width" value="<?php echo !empty($popupcart_image_width)? $popupcart_image_width : "100"; ?>" /> </td>
             </tr>
             <tr>
-              <td> <?php echo $this->language->get('text_popupcart_image_height'); ?> </td>
+              <td> <?php echo $lang->get('text_popupcart_image_height'); ?> </td>
               <td> <input type="text" name="popupcart_image_height" value="<?php echo !empty($popupcart_image_height)? $popupcart_image_height : "100"; ?>" /> </td>
             </tr>
             <tr>
-              <td> <?php echo $this->language->get('text_popupcart_title_visible'); ?> </td>
-              <td> 
-                <select name="popupcart_title_visible" id="">
-                  <option value="1" <?php echo $popupcart_title_visible?'selected="selected"':''; ?>>Да</option>
-                  <option value="0" <?php echo $popupcart_title_visible==0?'selected="selected"':'';?>>Нет</option>
+              <td> <?php echo $lang->get('text_popupcart_title_text'); ?></td>
+              <td> <input type="text" name="popupcart_title_text" value="<?php echo $popupcart_title_text; ?>" size="64" /> </td>
+            </tr>
+            <tr>
+              <td> <?php echo $lang->get('text_popupcart_title_draggable'); ?></td>
+              <td>
+                <select name="popupcart_title_draggable" id="">
+                  <option value="1" <?php echo $popupcart_title_draggable?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
+                  <option value="0" <?php echo $popupcart_title_draggable==0?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
                 </select>
               </td>
             </tr>
             <tr>
-              <td> <?php echo $this->language->get('text_popupcart_title_text'); ?></td>
-              <td> <input type="text" name="popupcart_title_text" value="<?php echo $popupcart_title_text; ?>" size="64" /> </td>
+              <td><?php echo $lang->get('text_popupcart_show_recommend'); ?></td>
+              <td>
+                <select name="popupcart_show_recommend" id="">
+                  <option value="1" <?php echo $popupcart_show_recommend ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
+                  <option value="0" <?php echo  ! $popupcart_show_recommend ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
+                </select>                
+              </td>
             </tr>
             <tr>
-              <td> <?php echo $this->language->get('text_popupcart_title_draggable'); ?></td>
+              <td><?php echo $lang->get('text_popupcart_field_model'); ?></td>
               <td>
-                <select name="popupcart_title_draggable" id="">
-                  <option value="1" <?php echo $popupcart_title_draggable?'selected="selected"':''; ?>>Да</option>
-                  <option value="0" <?php echo $popupcart_title_draggable==0?'selected="selected"':''; ?>>Нет</option>
-                </select>
+                <select name="popupcart_field_model" id="">
+                  <option value="1" <?php echo $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
+                  <option value="0" <?php echo  ! $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
+                </select>                
+              </td><?php echo $lang->get('text_no'); ?>
+            </tr>
+            <tr>
+              <td><?php echo $lang->get('text_popupcart_field_sku'); ?></td>
+              <td>
+                <select name="popupcart_field_sku" id="">
+                  <option value="1" <?php echo $popupcart_field_sku ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
+                  <option value="0" <?php echo  ! $popupcart_field_sku ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
+                </select>                
               </td>
             </tr>
           </table>
@@ -141,17 +159,17 @@ function addModule() {
 	<?php } ?>
 	html += '    </select></td>';
 	html += '    <td class="left"><select name="popupcart_module[' + module_row + '][position]">';
-	html += '      <option value="content_top"><?php echo $this->language->get('text_content_top'); ?></option>';
-	html += '      <option value="content_bottom"><?php echo $this->language->get('text_content_bottom'); ?></option>';
-	html += '      <option value="column_left"><?php echo $this->language->get('text_column_left'); ?></option>';
-	html += '      <option value="column_right"><?php echo $this->language->get('text_column_right'); ?></option>';
+	html += '      <option value="content_top"><?php echo $lang->get('text_content_top'); ?></option>';
+	html += '      <option value="content_bottom"><?php echo $lang->get('text_content_bottom'); ?></option>';
+	html += '      <option value="column_left"><?php echo $lang->get('text_column_left'); ?></option>';
+	html += '      <option value="column_right"><?php echo $lang->get('text_column_right'); ?></option>';
 	html += '    </select></td>';
 	html += '    <td class="left"><select name="popupcart_module[' + module_row + '][status]">';
-    html += '      <option value="1" selected="selected"><?php echo $this->language->get('text_enabled'); ?></option>';
-    html += '      <option value="0"><?php echo $this->language->get('text_disabled'); ?></option>';
+    html += '      <option value="1" selected="selected"><?php echo $lang->get('text_enabled'); ?></option>';
+    html += '      <option value="0"><?php echo $lang->get('text_disabled'); ?></option>';
     html += '    </select></td>';
 	html += '    <td class="right"><input type="text" name="popupcart_module[' + module_row + '][sort_order]" value="" size="3" /></td>';
-	html += '    <td class="left"><a onclick="$(\'#module-row' + module_row + '\').remove();" class="button"><?php echo $this->language->get('button_remove'); ?></a></td>';
+	html += '    <td class="left"><a onclick="$(\'#module-row' + module_row + '\').remove();" class="button"><?php echo $lang->get('button_remove'); ?></a></td>';
 	html += '  </tr>';
 	html += '</tbody>';
 	

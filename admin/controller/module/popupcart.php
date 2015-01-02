@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Модуль всплывающей корзины
+ *
+ * @author alex.s <aleks.strigin@ya.ru>
+ **/
 class ControllerModulePopupCart extends Controller {
 
 	private $version = '1.0';
@@ -22,6 +27,7 @@ class ControllerModulePopupCart extends Controller {
 		$this->token = $this->session->data['token'];
 				
 		$this->data['breadcrumbs'] = array();
+		$this->data['lang'] = $this->language;
 
  		$this->data['breadcrumbs'][] = array(
      		'text'      => $this->language->get('text_home'),
@@ -53,8 +59,12 @@ class ControllerModulePopupCart extends Controller {
 						
 			$this->session->data['success'] = $this->language->get('text_success');
 			
-			if( $action == 'save_exit' )
+			if($action == 'save_exit'){
 				$this->redirect($this->url->link('extension/module', 'token=' . $this->token, 'SSL'));
+			} else {
+				$this->redirect($this->url->link($this->module_link, 'token=' . $this->token, 'SSL'));
+			}
+
 		}
 		
 
@@ -68,7 +78,18 @@ class ControllerModulePopupCart extends Controller {
 		
 		$this->data['modules'] = array();
 		
-		$this->init_config_fields(array('popupcart_module','popupcart_image_width','popupcart_image_height','popupcart_title_draggable','popupcart_title_text','popupcart_title_visible'));
+		$this->init_config_fields(array(
+			'popupcart_module',
+			'popupcart_image_width',
+			'popupcart_image_height',
+			
+			'popupcart_title_draggable',
+
+			'popupcart_title_text',			
+			'popupcart_show_recommend',
+			'popupcart_field_model',
+			'popupcart_field_sku'
+		));
 
 		$this->data['modules'] = &$this->data['popupcart_module'];
 
@@ -92,9 +113,11 @@ class ControllerModulePopupCart extends Controller {
 		$settings = array(
 			'popupcart_image_width' => 100,
 			'popupcart_image_height' => 100,
-			'popupcart_title_visible' => 0,
-			'popupcart_title_text' => 'Всплывающая корзина',
-			'popupcart_title_draggable' => 0		
+			'popupcart_title_text' => 'Корзина товаров',
+			'popupcart_title_draggable' => 0,
+			'popupcart_show_recommend' => 1,
+			'popupcart_field_model'    => 1,
+			'popupcart_field_sku'      => 1
 		);
 
 		$this->model_setting_setting->editSetting('popupcart',$settings);
@@ -120,7 +143,7 @@ class ControllerModulePopupCart extends Controller {
 	}
 
 	private function validateForm() {
-		if (!$this->user->hasPermission('modify', 'module/popupcart')) {
+		if ( ! $this->user->hasPermission('modify', 'module/popupcart')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 

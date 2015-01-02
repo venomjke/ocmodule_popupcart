@@ -8,12 +8,12 @@ class ControllerModulePopupCart extends Controller {
 
 		$this->language->load('module/popupcart');
 
-		$this->data['heading_title'] = $this->language->get('heading_title');
+		$this->data['heading_title'] = $this->config->get('popupcart_title_text');
 
 		$this->data['config'] = array();
 
-		$this->data['popupcart_title_visible']= $this->config->get('popupcart_title_visible');
-		$this->data['popupcart_title_text']= $this->config->get('popupcart_title_text');
+		$this->data['popupcart_title_text'] = $this->config->get('popupcart_title_text');
+
 		$this->data['config']['draggable'] = $this->config->get('popupcart_title_draggable');
 
 		if( file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/stylesheet/popupcart.css') ){
@@ -22,6 +22,7 @@ class ControllerModulePopupCart extends Controller {
 			$this->document->addStyle('catalog/view/theme/default/stylesheet/popupcart.css');
 		}
 
+		$this->document->addScript('catalog/view/javascript/products.jcarousel.js');
 		$this->document->addScript('catalog/view/javascript/popupcart.js');
 
 		if ( file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/popupcart/index.tpl')) {
@@ -40,16 +41,33 @@ class ControllerModulePopupCart extends Controller {
 	{
 		if( ! $this->is_ajax() ) $this->redirect($this->url->link('common/home'));
 
+		$this->language->load('module/popupcart');
 		$this->language->load('module/cart');
-		
-  	if (isset($this->request->get['remove'])) {
-    	$this->cart->remove($this->request->get['remove']);	
-			unset($this->session->data['vouchers'][$this->request->get['remove']]);
-  	}	
-			
+
 		// Totals
 		$this->load->model('setting/extension');
+		$this->load->model('catalog/product');
 		
+		/*
+		* delete product
+		*/
+	  	if (isset($this->request->get['remove'])) {
+	    	$this->cart->remove($this->request->get['remove']);	
+			unset($this->session->data['vouchers'][$this->request->get['remove']]);
+	  	}	
+		
+		/*
+		* update quantity product
+		*/
+		if (isset($this->request->get['update']) && isset($this->request->get['qty'])) {
+	  		$this->cart->update($this->request->get['update'], $this->request->get['qty']);
+	  	}			
+
+		$this->data['popupcart_show_recommend']  = $this->config->get('popupcart_show_recommend');
+		$this->data['popupcart_field_sku']  = $this->config->get('popupcart_field_sku');
+		$this->data['popupcart_field_model']= $this->config->get('popupcart_field_model');
+
+
 		$total_data = array();
 		$total = 0;
 		$taxes = $this->cart->getTaxes();
@@ -100,14 +118,23 @@ class ControllerModulePopupCart extends Controller {
 		$this->load->model('tool/image');
 		
 		$this->data['products'] = array();
+		$this->data['products_related'] = array();
 			
 		foreach ($this->cart->getProducts() as $product) {
+
+			if($this->data['popupcart_show_recommend']){
+				$related = $this->model_catalog_product->getProductRelated($product['product_id']);
+				$this->data['products_related'] = array_merge($this->data['products_related'], $related);
+			}
+
 			if ($product['image']) {
 				$image = $this->model_tool_image->resize($product['image'], $popupcart_image_width,$popupcart_image_height);
 			} else {
 				$image = '';
 			}
-							
+
+			$product_info = $this->model_catalog_product->getProduct($product['product_id']);
+
 			$option_data = array();
 			
 			foreach ($product['option'] as $option) {
@@ -142,6 +169,7 @@ class ControllerModulePopupCart extends Controller {
 													
 			$this->data['products'][] = array(
 				'key'      => $product['key'],
+				'sku'	   => $product_info['sku'],
 				'thumb'    => $image,
 				'name'     => $product['name'],
 				'model'    => $product['model'], 
@@ -151,6 +179,28 @@ class ControllerModulePopupCart extends Controller {
 				'total'    => $total,	
 				'href'     => $this->url->link('product/product', 'product_id=' . $product['product_id'])		
 			);
+		}
+
+		foreach ($this->data['products_related'] as &$product) {
+
+			if ($product['image']) {
+				$image = $this->model_tool_image->resize($product['image'], 50, 50);
+			} else {
+				$image = '';
+			}
+			
+			// Display prices
+			if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+				$price = $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')));
+			} else {
+				$price = false;
+			}
+						
+			$product['image'] = $image;
+			$product['price'] = $price;
+			$product['href']  = $this->url->link('product/product', 'product_id=' . $product['product_id']);
+			$product['description'] = mb_substr(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8'), 0, 90);
+
 		}
 		
 		// Gift Voucher
@@ -181,7 +231,7 @@ class ControllerModulePopupCart extends Controller {
 
 	private function is_ajax()
 	{
-		return !empty($this->request->server['HTTP_X_REQUESTED_WITH']) && strtolower($this->request->server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+		return ! empty($this->request->server['HTTP_X_REQUESTED_WITH']) && strtolower($this->request->server['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 	}
 }
 ?>

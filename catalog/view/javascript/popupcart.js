@@ -9,9 +9,26 @@
 
 	// div
 	var popupCartContainer = '#popupcart';
+	var popupCartContainerBg = '#popupcart-bg';
 	var popupCartTitle = 'div.title';
 	var popupCartContent = '#popupcart .popupcart_content';
+	
+	/*
+	* Путь до товарной сетки
+	*/
+	productGridPath = '.product-grid, .product-list',
 
+	/*
+	* Путь до кнопки добавления товара с id товара
+	*/
+	productIdPath   = '.product-grid div div.cart input.button, .product-list div div.cart input.button,.product-info div.cart #button-cart',
+
+	/*
+	* регулярка для извлечения id товара из строки addToCart('id'), другого способа извлечения id
+	* не нашел, только если в ручную задавать
+	*/
+	regexProductId  = /\w+\('(\d+)'\);/,
+	
 	/*
 	* Инициализация контейнера
 	*/
@@ -23,7 +40,7 @@
 			draggable : "1",
 		};
 
-		config = $.extend({},defConf,config);
+		config = $.extend({}, defConf, config);
 
 		// Настройка эффекта draggable
 		if( parseInt(config.draggable) == 1 ){
@@ -54,7 +71,16 @@
 			if(event.which == 27) { // ESC 
 				$this.close();
 			}
-		});		
+		});
+
+		$this.bindAddToCartHandler();
+
+		// привязываем обработчик к переключателям вида	
+		// if($('.display a').length){
+		// 	$('.display').bind('DOMSubtreeModified', function(){
+		// 		$this.bindAddToCartHandler();
+		// 	});
+		// };
 	};
 
 	/*
@@ -66,16 +92,35 @@
 			$(popupCartContainer).css('left', $(window).width()/2-$(popupCartContainer).width()/2);
 			$(popupCartContainer).css("position","fixed");
 			$(popupCartContainer).show();	
+
+			$(popupCartContainerBg).show();
+			
+			$('.jcarousel').jcarousel({
+				animation: 'slow',
+				items: '.carousel-block-ajcart',
+				wrap: 'both'
+			});
+//			$('.jcarousel-control-prev').on('click')
 		});
 		
 		return false;
 	};
+
+	modPopupCart.bindAddToCartHandler = function(){
+		var $this = this;
+
+		// Загрузка доп. изображений для каждого товара
+		$(productIdPath).click(function(){
+			setTimeout(modPopupCart.open, 200);
+		});
+	}
 
 	/*
 	* Закрытие окна корзины
 	*/
 	modPopupCart.close = function(){
 		$(popupCartContainer).hide();
+		$(popupCartContainerBg).hide();
 		$(popupCartContent).empty();
 		return false;
 	};
@@ -87,7 +132,13 @@
 		if(getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
 			location = cartCheckoutUri + '&remove=' + productId;
 		} else {
-			$(popupCartContent).load(popupCartUri + '&remove=' + productId);
+			$(popupCartContent).load(popupCartUri + '&remove=' + productId, {}, function(){
+				$('.jcarousel').jcarousel({
+					animation: 'slow',
+					items: '.carousel-block-ajcart',
+					wrap: 'both'
+				});
+			});
 		}
 	}
 
@@ -98,10 +149,40 @@
 		if(getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
 			location = cartCheckoutUri + '&remove=' + voucherId;
 		} else {
-			$(popupCartContent).load(popupCartUri+'&remove=' + voucherId);
+			$(popupCartContent).load(popupCartUri+'&remove=' + voucherId, {}, function(){
+				
+			});
 		}
+	}
+	
+	modPopupCart.upQuantity = function(id) {
+		var quantity = parseInt($(id).parent().children('.qt').val());
+		quantity = quantity + 1;
+		modPopupCart.changeQuantity(id, quantity);
+	}
+	
+	modPopupCart.downQuantity = function(id) {
+		var quantity = parseInt($(id).parent().children('.qt').val());
+		quantity = quantity - 1;
+		modPopupCart.changeQuantity(id, quantity);
+	}
+	
+	modPopupCart.changeQuantity = function(id, quantity) {
+		
+		if(quantity == undefined){
+			quantity = parseInt($(id).val());	
+		}
+		
+		pid = $(id).parent().children('.product_id').val();
+		
+		$(popupCartContent).load(popupCartUri + '&update=' + pid + '&qty='+quantity, {}, function(){
+			$('.jcarousel').jcarousel({
+				animation: 'slow',
+				items: '.carousel-block-ajcart',
+				wrap: 'both'
+			});	
+		});
 	}
 
 	window.modPopupCart = modPopupCart;
-
 })($);
