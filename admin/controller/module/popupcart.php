@@ -7,7 +7,7 @@
  **/
 class ControllerModulePopupCart extends Controller {
 
-	private $version = '1.0';
+	private $version = '2.0';
 		
 	private $error = array();
 
@@ -22,7 +22,7 @@ class ControllerModulePopupCart extends Controller {
 		$this->load->language('module/popupcart');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-		$this->data['heading_title'] = $this->language->get('heading_title');
+		$this->data['heading_title'] = $this->language->get('heading_title') . ' v' . $this->version;
 	
 		$this->token = $this->session->data['token'];
 				

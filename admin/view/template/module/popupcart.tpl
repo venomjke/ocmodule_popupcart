@@ -130,7 +130,7 @@
                   <option value="1" <?php echo $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
                   <option value="0" <?php echo  ! $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
                 </select>                
-              </td><?php echo $lang->get('text_no'); ?>
+              </td>
             </tr>
             <tr>
               <td><?php echo $lang->get('text_popupcart_field_sku'); ?></td>
@@ -150,32 +150,32 @@
 <script type="text/javascript"><!--
 var module_row = <?php echo $module_row; ?>;
 
-function addModule() {	
-	html  = '<tbody id="module-row' + module_row + '">';
-	html += '  <tr>';
-	html += '    <td class="left"><select name="popupcart_module[' + module_row + '][layout_id]">';
-	<?php foreach ($layouts as $layout) { ?>
-	html += '      <option value="<?php echo $layout['layout_id']; ?>"><?php echo addslashes($layout['name']); ?></option>';
-	<?php } ?>
-	html += '    </select></td>';
-	html += '    <td class="left"><select name="popupcart_module[' + module_row + '][position]">';
-	html += '      <option value="content_top"><?php echo $lang->get('text_content_top'); ?></option>';
-	html += '      <option value="content_bottom"><?php echo $lang->get('text_content_bottom'); ?></option>';
-	html += '      <option value="column_left"><?php echo $lang->get('text_column_left'); ?></option>';
-	html += '      <option value="column_right"><?php echo $lang->get('text_column_right'); ?></option>';
-	html += '    </select></td>';
-	html += '    <td class="left"><select name="popupcart_module[' + module_row + '][status]">';
+function addModule() {  
+  html  = '<tbody id="module-row' + module_row + '">';
+  html += '  <tr>';
+  html += '    <td class="left"><select name="popupcart_module[' + module_row + '][layout_id]">';
+  <?php foreach ($layouts as $layout) { ?>
+  html += '      <option value="<?php echo $layout['layout_id']; ?>"><?php echo addslashes($layout['name']); ?></option>';
+  <?php } ?>
+  html += '    </select></td>';
+  html += '    <td class="left"><select name="popupcart_module[' + module_row + '][position]">';
+  html += '      <option value="content_top"><?php echo $lang->get('text_content_top'); ?></option>';
+  html += '      <option value="content_bottom"><?php echo $lang->get('text_content_bottom'); ?></option>';
+  html += '      <option value="column_left"><?php echo $lang->get('text_column_left'); ?></option>';
+  html += '      <option value="column_right"><?php echo $lang->get('text_column_right'); ?></option>';
+  html += '    </select></td>';
+  html += '    <td class="left"><select name="popupcart_module[' + module_row + '][status]">';
     html += '      <option value="1" selected="selected"><?php echo $lang->get('text_enabled'); ?></option>';
     html += '      <option value="0"><?php echo $lang->get('text_disabled'); ?></option>';
     html += '    </select></td>';
-	html += '    <td class="right"><input type="text" name="popupcart_module[' + module_row + '][sort_order]" value="" size="3" /></td>';
-	html += '    <td class="left"><a onclick="$(\'#module-row' + module_row + '\').remove();" class="button"><?php echo $lang->get('button_remove'); ?></a></td>';
-	html += '  </tr>';
-	html += '</tbody>';
-	
-	$('#module tfoot').before(html);
-	
-	module_row++;
+  html += '    <td class="right"><input type="text" name="popupcart_module[' + module_row + '][sort_order]" value="" size="3" /></td>';
+  html += '    <td class="left"><a onclick="$(\'#module-row' + module_row + '\').remove();" class="button"><?php echo $lang->get('button_remove'); ?></a></td>';
+  html += '  </tr>';
+  html += '</tbody>';
+  
+  $('#module tfoot').before(html);
+  
+  module_row++;
 }
 //--></script> 
 <script type="text/javascript"><!--

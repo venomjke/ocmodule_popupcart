@@ -42,7 +42,8 @@ class ControllerModulePopupCart extends Controller {
 		if( ! $this->is_ajax() ) $this->redirect($this->url->link('common/home'));
 
 		$this->language->load('module/popupcart');
-		$this->language->load('module/cart');
+
+		// $this->language->load('module/cart');
 
 		// Totals
 		$this->load->model('setting/extension');

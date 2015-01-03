@@ -214,6 +214,9 @@
 .popupcart .mini-cart-info .remove{
 	text-align: center;
 }
+.popupcart .mini-cart-info .remove img{
+	cursor: pointer;
+}
 .popupcart #cart{
 	padding: 0 25px;
 }

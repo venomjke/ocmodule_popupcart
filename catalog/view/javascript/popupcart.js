@@ -21,7 +21,7 @@
 	/*
 	* Путь до кнопки добавления товара с id товара
 	*/
-	var productIdPath   = '.product-grid div div.cart input.button, .product-list div div.cart input.button,.product-info div.cart #button-cart,div.cart input.button';
+	var productIdPath   = '.product-grid div div.cart .button, .product-list div div.cart .button,.product-info div.cart #button-cart,div.cart .button';
 	
 	/*
 	* Инициализация контейнера
@@ -133,7 +133,7 @@
 	* Удаление товарной позиции
 	*/
 	modPopupCart.removeProduct = function(productId){
-		if(getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
+		if(typeof getURLVar == 'function' && (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout')) {
 			location = cartCheckoutUri + '&remove=' + productId;
 		} else {
 			$(popupCartContent).load(popupCartUri + '&remove=' + productId, {}, function(){
@@ -152,7 +152,7 @@
 	* Удаление ваучера
 	*/
 	modPopupCart.removeVoucher = function(voucherId){
-		if(getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') {
+		if(typeof getURLVar == 'function' && (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout')) {
 			location = cartCheckoutUri + '&remove=' + voucherId;
 		} else {
 			$(popupCartContent).load(popupCartUri+'&remove=' + voucherId, {}, function(){
