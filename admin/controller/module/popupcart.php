@@ -7,13 +7,18 @@
  **/
 class ControllerModulePopupCart extends Controller {
 
-	private $version = '2.0';
+	private $version = '2.5';
 		
 	private $error = array();
 
 	private $token = '';
 
 	private $module_link = 'module/popupcart';
+
+	/*
+	* Типа рекомендаций
+	*/
+	private $popupcart_types_recommend = array('recommend', 'bestseller', 'latest', 'popular');
 
 	public function __construct($registry)
 	{
@@ -46,6 +51,9 @@ class ControllerModulePopupCart extends Controller {
 				'href'      => $this->url->link($this->module_link, 'token=' . $this->token, 'SSL'),
     		'separator' => ' :: '
  		);				
+
+ 		$this->data['popupcart_types_recommend'] = $this->popupcart_types_recommend;
+ 		$this->data['popupcart_footer'] = sprintf($this->language->get('text_popupcart_footer'), $this->version);
 	}
 
 	public function index()
@@ -67,7 +75,6 @@ class ControllerModulePopupCart extends Controller {
 
 		}
 		
-
 		$this->check_warnings();
 
 		$this->check_errors();
@@ -82,11 +89,14 @@ class ControllerModulePopupCart extends Controller {
 			'popupcart_module',
 			'popupcart_image_width',
 			'popupcart_image_height',
-			
-			'popupcart_title_draggable',
-
 			'popupcart_title_text',			
+			'popupcart_title_draggable',
+			
+			'popupcart_title_recommend',
 			'popupcart_show_recommend',
+			'popupcart_type_recommend',
+			'popupcart_limit_recommend',
+
 			'popupcart_field_model',
 			'popupcart_field_sku'
 		));
@@ -115,7 +125,12 @@ class ControllerModulePopupCart extends Controller {
 			'popupcart_image_height' => 100,
 			'popupcart_title_text' => 'Корзина товаров',
 			'popupcart_title_draggable' => 0,
-			'popupcart_show_recommend' => 1,
+			
+			'popupcart_show_recommend'  => 1,
+			'popupcart_title_recommend' => 'С этим товаром покупают',
+			'popupcart_type_recommend'  => 'recommend',
+			'popupcart_limit_recommend' => 10,
+			
 			'popupcart_field_model'    => 1,
 			'popupcart_field_sku'      => 1
 		);
@@ -166,6 +181,14 @@ class ControllerModulePopupCart extends Controller {
 
 	private function check_warnings()
 	{
+		if (isset($this->session->data['success'])) {
+			$this->data['success'] = $this->session->data['success'];
+		
+			unset($this->session->data['success']);
+		} else {
+			$this->data['success'] = '';
+		}
+
  		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
 		} else {

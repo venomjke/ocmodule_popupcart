@@ -2,25 +2,25 @@
 <div id="cart">
   <div>
     <?php if ($products || $vouchers) { ?>
-    <div class="mini-cart-info">
+    <div class="mini-cart-info cart-info">
       <table class="popupcart-table">
         <thead>
             <tr>
-                <th class="image"><?php echo $lang->get('popupcart_image') ?></th>
-                <th class="name"><?php echo $lang->get('popupcart_name') ?></th>
+                <td class="image"><?php echo $lang->get('popupcart_image') ?></td>
+                <td class="name"><?php echo $lang->get('popupcart_name') ?></td>
 
                 <?php if ($popupcart_field_model): ?>
-                <th class="model"><?php echo $lang->get('popupcart_model'); ?></th>                  
+                <td class="model"><?php echo $lang->get('popupcart_model'); ?></td>                  
                 <?php endif; ?>
 
                 <?php if ($popupcart_field_sku): ?>
-                <th class="sku"><?php echo $lang->get('popupcart_sku'); ?></th>                  
+                <td class="sku"><?php echo $lang->get('popupcart_sku'); ?></td>                  
                 <?php endif ?>
 
-                <th class="price"><?php echo $lang->get('popupcart_price'); ?></th>
-                <th class="quantity"><?php echo $lang->get('popupcart_quantity'); ?></th>
-                <th class="subtotal"><?php echo $lang->get('popupcart_subtotal'); ?></th>
-                <th class="delete"><?php echo $lang->get('popupcart_delete'); ?></th>
+                <td class="price"><?php echo $lang->get('popupcart_price'); ?></td>
+                <td class="quantity"><?php echo $lang->get('popupcart_quantity'); ?></td>
+                <td class="subtotal"><?php echo $lang->get('popupcart_subtotal'); ?></td>
+                <td class="delete"><?php echo $lang->get('popupcart_delete'); ?></td>
             </tr>
         </thead>
         <?php foreach ($products as $product) { ?>
@@ -55,11 +55,11 @@
             <?php echo $product['price'] ?>
           </td>
           <td class="quantity">
-        <input hidden="" class="product_id" value="<?php echo $product['key'] ?>" style="display:none;">
-        <a onclick="modPopupCart.downQuantity(this);" class="quantity-m">-</a>
-        <input value="<?php echo $product['quantity']; ?>" name="quantity" class="qt" onchange="modPopupCart.changeQuantity(this);" maxlength="4" onkeyup="modPopupCart.changeQuantity(this);">
-        <a onclick="modPopupCart.upQuantity(this);" class="quantity-p">+</a>
-      </td>
+            <input hidden="" class="product_id" value="<?php echo $product['key'] ?>" style="display:none;">
+            <a onclick="modPopupCart.downQuantity(this);" class="quantity-m">-</a>
+            <input value="<?php echo $product['quantity']; ?>" name="quantity" class="qt" size="1" onchange="modPopupCart.changeQuantity(this);" maxlength="4" onkeyup="modPopupCart.changeQuantity(this);">
+            <a onclick="modPopupCart.upQuantity(this);" class="quantity-p">+</a>
+          </td>
           <td class="total"><?php echo $product['total']; ?></td>
           <td class="remove">
             <img src="catalog/view/theme/default/image/remove-small.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" onclick="modPopupCart.removeProduct('<?php echo $product['key']; ?>');" />
@@ -76,7 +76,7 @@
         </tr>
         <?php } ?>
         <tr class="popupcart-table-total">
-          <td colspan="10">
+          <td colspan="8">
           <?php foreach ($totals as $total) { ?>
             <div class="<?php echo $total['code']; ?>">
              <b><?php echo $total['title']; ?>:</b>
@@ -87,7 +87,7 @@
         </tr>
         <tfoot>
           <tr>
-            <td colspan="10">
+            <td colspan="8">
               <a onclick="modPopupCart.close();" class="button"><?php echo $lang->get('button_continue') ?></a>        
               <a href="<?php echo $checkout; ?>" class="button checkout"><?php echo $lang->get('button_checkout'); ?></a>        
             </td>
@@ -103,40 +103,40 @@
 
   <?php if ($popupcart_show_recommend && ! empty($products_related)): ?>
     <div class="popupcart-recommend">
-      <div id="popupcart-recommend-title"><?php echo $lang->get('popupcart_recommend'); ?></div>
-      <div class="jcarousel-wrapper">
-        <div class="jcarousel">
-          <ul>
+      <div id="popupcart-recommend-title"><?php echo $popupcart_title_recommend; ?></div>
+      <div id="popupcart-carousel">
+        <ul class="jcarousel-skin-opencart">
             <?php foreach ($products_related as $product): ?>
-              <li class="carousel-block-ajcart">
+              <li>
                 <div class="name">
                   <a href="<?php echo $product['href']; ?>" title="<?php echo $product['name']; ?>"><?php echo $product['name']; ?></a>
                 </div>
-                <div class="image">
-                  <a href="<?php echo $product['href'] ?>"><img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>"></a>
-                </div>
-                <div class="description">
-                  <?php echo $product['description']; ?> ...
+                <div>
+                  <div class="image">
+                    <a href="<?php echo $product['href'] ?>"><img src="<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" /></a>
+                  </div>
+                  <div class="description">
+                    <?php echo $product['description']; ?> ...
+                  </div>                  
                 </div>
                 <div class="block">
                   <div class="price">
                     <?php echo $product['price']; ?>
                   </div>
                   <div class="cart">
-                    <input type="button" value="Купить" class="button" onclick="addToCart(<?php echo $product['product_id']; ?>)">
+                    <input type="button" value="Купить" class="button" onclick="addToCart(<?php echo $product['product_id']; ?>)" />
                   </div>
                 </div>
-                  <div class="block2">
-                    <a onclick="addToWishList('<?php echo $product['product_id'] ?>');" class="link"><?php echo $lang->get('button_wishlist'); ?></a>
-                    <a onclick="addToCompare('<?php echo $product['product_id'] ?>');" class="link"><?php echo $lang->get('button_compare'); ?></a>
-                  </div>
               </li>
-            <?php endforeach ?>
-          </ul>
-        </div>
-        <a class="jcarousel-ajcart-prev jcarousel-control-prev" onclick="$('.jcarousel').data('jcarousel').scroll('-=1');"><img src="image/popupcart/carousel-left.png"></a>
-        <a class="jcarousel-ajcart-next jcarousel-control-next" onclick="$('.jcarousel').data('jcarousel').scroll('+=1');"><img src="image/popupcart/carousel-right.png"></a>
-        <div class="jcarousel-pagination"></div>
+            <?php endforeach ?>        
+        </ul>
       </div>
+      <script type="text/javascript"><!--
+      $('#popupcart-carousel ul').jcarousel({
+        vertical: false,
+        // visible: 2,
+        scroll: 1
+      });
+      //--></script>
     </div>
   <?php endif ?>

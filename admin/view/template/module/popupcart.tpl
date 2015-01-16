@@ -1,10 +1,29 @@
 <?php echo $header; ?>
+<style type="text/css">
+  .box-footer{
+    height: 29px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border: 1px solid #DBDBDB;
+    background: url('/admin/view/image/box.png') repeat-x;
+    /* -webkit-border-radius: 0px 7px 0px 0px; */
+    -moz-border-radius: 7px 7px 0px 0px;
+    -khtml-border-radius: 7px 7px 0px 0px;
+    /* border-radius: 7px 7px 0px 0px; */
+    padding-top: 9px;
+    text-align: center;
+  }
+</style>
 <div id="content">
   <div class="breadcrumb">
     <?php foreach ($breadcrumbs as $breadcrumb) { ?>
     <?php echo $breadcrumb['separator']; ?><a href="<?php echo $breadcrumb['href']; ?>"><?php echo $breadcrumb['text']; ?></a>
     <?php } ?>
   </div>
+  <?php if ($success) { ?>
+  <div class="success"><?php echo $success; ?></div>
+  <?php } ?>
+
   <?php if ($error_warning) { ?>
   <div class="warning"><?php echo $error_warning; ?></div>
   <?php } ?>
@@ -92,7 +111,12 @@
             </table>
         </div>
         <div id="tab_settings">
+          <h2><?php echo $lang->get('text_popupcart_settings_modal'); ?></h2>
           <table class="form">
+            <tr>
+              <td> <?php echo $lang->get('text_popupcart_title_text'); ?></td>
+              <td> <input type="text" name="popupcart_title_text" value="<?php echo $popupcart_title_text; ?>" size="64" /> </td>
+            </tr>
             <tr>
               <td> <?php echo $lang->get('text_popupcart_image_width'); ?> </td>
               <td> <input type="text" name="popupcart_image_width" value="<?php echo !empty($popupcart_image_width)? $popupcart_image_width : "100"; ?>" /> </td>
@@ -100,10 +124,6 @@
             <tr>
               <td> <?php echo $lang->get('text_popupcart_image_height'); ?> </td>
               <td> <input type="text" name="popupcart_image_height" value="<?php echo !empty($popupcart_image_height)? $popupcart_image_height : "100"; ?>" /> </td>
-            </tr>
-            <tr>
-              <td> <?php echo $lang->get('text_popupcart_title_text'); ?></td>
-              <td> <input type="text" name="popupcart_title_text" value="<?php echo $popupcart_title_text; ?>" size="64" /> </td>
             </tr>
             <tr>
               <td> <?php echo $lang->get('text_popupcart_title_draggable'); ?></td>
@@ -114,36 +134,64 @@
                 </select>
               </td>
             </tr>
-            <tr>
-              <td><?php echo $lang->get('text_popupcart_show_recommend'); ?></td>
-              <td>
-                <select name="popupcart_show_recommend" id="">
-                  <option value="1" <?php echo $popupcart_show_recommend ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
-                  <option value="0" <?php echo  ! $popupcart_show_recommend ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
-                </select>                
-              </td>
-            </tr>
-            <tr>
-              <td><?php echo $lang->get('text_popupcart_field_model'); ?></td>
-              <td>
-                <select name="popupcart_field_model" id="">
-                  <option value="1" <?php echo $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
-                  <option value="0" <?php echo  ! $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
-                </select>                
-              </td>
-            </tr>
-            <tr>
-              <td><?php echo $lang->get('text_popupcart_field_sku'); ?></td>
-              <td>
-                <select name="popupcart_field_sku" id="">
-                  <option value="1" <?php echo $popupcart_field_sku ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
-                  <option value="0" <?php echo  ! $popupcart_field_sku ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
-                </select>                
-              </td>
-            </tr>
-          </table>
+            </table>
+            <h2><?php echo $lang->get('text_popupcart_settings_recommend'); ?></h2>
+            <table class="form">
+              <tr>
+                <td><?php echo $lang->get('text_popupcart_title_recommend') ?></td>
+                <td><input type="text" name="popupcart_title_recommend" value="<?php echo $popupcart_title_recommend; ?>" size="64"></td>
+              </tr>
+              <tr>
+                <td><?php echo $lang->get('text_popupcart_show_recommend'); ?></td>
+                <td>
+                  <select name="popupcart_show_recommend" id="">
+                    <option value="1" <?php echo $popupcart_show_recommend ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
+                    <option value="0" <?php echo  ! $popupcart_show_recommend ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
+                  </select>                
+                </td>
+              </tr>              
+              <tr>
+                <td><?php echo $lang->get('text_popupcart_types_recommend'); ?></td>
+                <td>
+                  <select name="popupcart_type_recommend" id="">
+                    <?php foreach ($popupcart_types_recommend as $type): ?>
+                      <option value="<?php echo $type; ?>" <?php echo ! empty($popupcart_type_recommend) && $popupcart_type_recommend == $type ? 'selected': ''; ?>><?php echo $lang->get('text_popupcart_type_' . $type); ?></option>
+                    <?php endforeach ?>
+                  </select>                
+                </td>
+              </tr>              
+              <tr>
+                <td><?php echo $lang->get('text_popupcart_limit_recommend') ?></td>
+                <td><input type="text" name="popupcart_limit_recommend" value="<?php echo $popupcart_limit_recommend; ?>" size="64"></td>
+              </tr>
+            </table>
+            <h2><?php echo $lang->get('text_popupcart_settings_fields'); ?></h2>
+            <table class="form">
+              <tr>
+                <td><?php echo $lang->get('text_popupcart_field_model'); ?></td>
+                <td>
+                  <select name="popupcart_field_model" id="">
+                    <option value="1" <?php echo $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
+                    <option value="0" <?php echo  ! $popupcart_field_model ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
+                  </select>                
+                </td>
+              </tr>
+              <tr>
+                <td><?php echo $lang->get('text_popupcart_field_sku'); ?></td>
+                <td>
+                  <select name="popupcart_field_sku" id="">
+                    <option value="1" <?php echo $popupcart_field_sku ?'selected="selected"':''; ?>><?php echo $lang->get('text_yes'); ?></option>
+                    <option value="0" <?php echo  ! $popupcart_field_sku ?'selected="selected"':''; ?>><?php echo $lang->get('text_no'); ?></option>
+                  </select>                
+                </td>
+              </tr>
+            </table>
         </div>
       </form>
+
+        <div class="box-footer">
+          <?php echo $popupcart_footer; ?>
+        </div>
     </div>
   </div>
 </div>

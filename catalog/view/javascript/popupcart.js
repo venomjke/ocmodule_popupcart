@@ -14,11 +14,6 @@
 	var popupCartContent = '#popupcart .popupcart_content';
 	
 	/*
-	* Путь до товарной сетки
-	*/
-	var productGridPath = '.product-grid, .product-list';
-
-	/*
 	* Путь до кнопки добавления товара с id товара
 	*/
 	var productIdPath   = '.product-grid div div.cart .button, .product-list div div.cart .button,.product-info div.cart #button-cart,div.cart .button';
@@ -37,7 +32,7 @@
 		config = $.extend({}, defConf, config);
 
 		// Настройка эффекта draggable
-		if( parseInt(config.draggable) == 1 ){
+		if(parseInt(config.draggable) == 1){
 			$(popupCartContainer).draggable({ handle: popupCartTitle });
 		}
 
@@ -89,30 +84,26 @@
 
 			$(popupCartContainerBg).show();
 			
-			$('.jcarousel').jcarousel({
-				animation: 'slow',
-				items: '.carousel-block-ajcart',
-				wrap: 'both'
-			});
-
 			modPopupCart.bindAddToCartHandler(true);
 		});
 		
 		return false;
 	};
 
+	/*
+	* Подключение обработчика к кнопке "в корзину", показывающего всплывающее окно.
+	*
+	* setTimout позволяет открывать модальное окно после того, как товар уже добавлен в корзину, а не раньше.
+	*/
 	modPopupCart.bindAddToCartHandler = function(cartContent){
 		var $this = this;
 
 		if(cartContent){
-			// Загрузка доп. изображений для каждого товара
 			$(popupCartContent).find(productIdPath).click(function(){
 				setTimeout(modPopupCart.open, 200);
-				// console.log('im here');
 			});
 
 		} else {
-			// Загрузка доп. изображений для каждого товара
 			$(productIdPath).click(function(){
 				setTimeout(modPopupCart.open, 200);
 			});			
@@ -137,12 +128,6 @@
 			location = cartCheckoutUri + '&remove=' + productId;
 		} else {
 			$(popupCartContent).load(popupCartUri + '&remove=' + productId, {}, function(){
-				$('.jcarousel').jcarousel({
-					animation: 'slow',
-					items: '.carousel-block-ajcart',
-					wrap: 'both'
-				});
-
 				modPopupCart.bindAddToCartHandler(true);				
 			});
 		}
@@ -155,12 +140,7 @@
 		if(typeof getURLVar == 'function' && (getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout')) {
 			location = cartCheckoutUri + '&remove=' + voucherId;
 		} else {
-			$(popupCartContent).load(popupCartUri+'&remove=' + voucherId, {}, function(){
-				$('.jcarousel').jcarousel({
-					animation: 'slow',
-					items: '.carousel-block-ajcart',
-					wrap: 'both'
-				});	
+			$(popupCartContent).load(popupCartUri+'&remove=' + voucherId, {}, function(){	
 				modPopupCart.bindAddToCartHandler(true);
 			});
 		}
@@ -178,6 +158,10 @@
 		modPopupCart.changeQuantity(id, quantity);
 	}
 	
+	/*
+	* Изменение количества выбранной позиции.
+	* Если quantity не задан, то используется значение поля input[name=quantity]
+	*/
 	modPopupCart.changeQuantity = function(id, quantity) {
 		
 		if(quantity == undefined){

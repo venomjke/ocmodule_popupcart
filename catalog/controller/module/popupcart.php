@@ -22,7 +22,13 @@ class ControllerModulePopupCart extends Controller {
 			$this->document->addStyle('catalog/view/theme/default/stylesheet/popupcart.css');
 		}
 
-		$this->document->addScript('catalog/view/javascript/products.jcarousel.js');
+		if (file_exists('catalog/view/theme/' . $this->config->get('config_template') . '/stylesheet/carousel.css')) {
+			$this->document->addStyle('catalog/view/theme/' . $this->config->get('config_template') . '/stylesheet/carousel.css');
+		} else {
+			$this->document->addStyle('catalog/view/theme/default/stylesheet/carousel.css');
+		}
+
+		$this->document->addScript('catalog/view/javascript/jquery/jquery.jcarousel.min.js');
 		$this->document->addScript('catalog/view/javascript/popupcart.js');
 
 		if ( file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/module/popupcart/index.tpl')) {
@@ -45,10 +51,10 @@ class ControllerModulePopupCart extends Controller {
 
 		// $this->language->load('module/cart');
 
-		// Totals
 		$this->load->model('setting/extension');
 		$this->load->model('catalog/product');
-		
+		$this->load->model('tool/image');
+
 		/*
 		* delete product
 		*/
@@ -64,7 +70,13 @@ class ControllerModulePopupCart extends Controller {
 	  		$this->cart->update($this->request->get['update'], $this->request->get['qty']);
 	  	}			
 
+		$this->data['heading_title'] = $this->language->get('heading_title');
+
+	  	$this->data['popupcart_title_recommend'] = $this->config->get('popupcart_title_recommend');
 		$this->data['popupcart_show_recommend']  = $this->config->get('popupcart_show_recommend');
+		$type_recommend = $this->config->get('popupcart_type_recommend');
+		$limit_recommend = $this->config->get('popupcart_limit_recommend');
+
 		$this->data['popupcart_field_sku']  = $this->config->get('popupcart_field_sku');
 		$this->data['popupcart_field_model']= $this->config->get('popupcart_field_model');
 
@@ -77,7 +89,8 @@ class ControllerModulePopupCart extends Controller {
 		$popupcart_image_height= $this->config->get('popupcart_image_height');
 		
 		// Display prices
-		if ( ($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price') ) {
+		if ( ($this->config->get('config_customer_price') && $this->customer->isLogged()) || 
+			 ! $this->config->get('config_customer_price') ) {
 			$sort_order = array(); 
 			
 			$results = $this->model_setting_extension->getExtensions('total');
@@ -106,24 +119,19 @@ class ControllerModulePopupCart extends Controller {
 		}
 		
 		$this->data['totals'] = $total_data;
-		
-		$this->data['heading_title'] = $this->language->get('heading_title');
-		
-		$this->data['text_items'] = sprintf($this->language->get('text_items'), $this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), $this->currency->format($total));
-		$this->data['text_empty'] = $this->language->get('text_empty');
-		$this->data['text_cart'] = $this->language->get('text_cart');
-		$this->data['text_checkout'] = $this->language->get('text_checkout');
+				
+		$this->data['text_items'] = sprintf($this->language->get('text_items'), 
+											$this->cart->countProducts() + (isset($this->session->data['vouchers']) ? count($this->session->data['vouchers']) : 0), 
+											$this->currency->format($total));
 		
 		$this->data['button_remove'] = $this->language->get('button_remove');
-		
-		$this->load->model('tool/image');
-		
+				
 		$this->data['products'] = array();
 		$this->data['products_related'] = array();
 			
 		foreach ($this->cart->getProducts() as $product) {
 
-			if($this->data['popupcart_show_recommend']){
+			if($this->data['popupcart_show_recommend'] && $type_recommend == 'recommend'){
 				$related = $this->model_catalog_product->getProductRelated($product['product_id']);
 				$this->data['products_related'] = array_merge($this->data['products_related'], $related);
 			}
@@ -182,10 +190,23 @@ class ControllerModulePopupCart extends Controller {
 			);
 		}
 
-		foreach ($this->data['products_related'] as &$product) {
+
+		switch ($type_recommend) {
+			case 'bestseller':
+				$this->data['products_related'] = $this->model_catalog_product->getBestSellerProducts($limit_recommend);
+				break;
+			case 'latest':
+				$this->data['products_related'] = $this->model_catalog_product->getLatestProducts($limit_recommend);
+				break;
+			case 'popular':
+				$this->data['products_related'] = $this->model_catalog_product->getPopularProducts($limit_recommend);
+				break;
+		}
+
+		foreach ($this->data['products_related'] as & $product) {
 
 			if ($product['image']) {
-				$image = $this->model_tool_image->resize($product['image'], 50, 50);
+				$image = $this->model_tool_image->resize($product['image'], 80, 80);
 			} else {
 				$image = '';
 			}
@@ -200,7 +221,7 @@ class ControllerModulePopupCart extends Controller {
 			$product['image'] = $image;
 			$product['price'] = $price;
 			$product['href']  = $this->url->link('product/product', 'product_id=' . $product['product_id']);
-			$product['description'] = mb_substr(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8'), 0, 90);
+			$product['description'] = mb_substr(strip_tags(html_entity_decode($product['description'], ENT_QUOTES, 'UTF-8')), 0, 75);
 
 		}
 		
